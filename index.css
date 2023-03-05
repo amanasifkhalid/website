@@ -1,0 +1,31 @@
+body {
+    background: black;
+    color: white;
+    font-family: monospace;
+    font-size: xx-large;
+}
+
+a {
+    color: #6DCAE5;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.blue {
+    color: #6DCAE5;
+}
+
+.pink {
+    color: #DB6DB4;
+}
+
+.warn {
+    color: #FFCB05;
+}
+
+#input:focus {
+    outline: none;
+}
