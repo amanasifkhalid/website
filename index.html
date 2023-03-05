@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Aman Khalid</title>
+    </head>
+    <body>
+        <noscript>Regretfully, this page requires JavaScript.</noscript>
+        <div id="term">
+            <div id="out">
+                <div id="welcome">Welcome to the machine, guest.</div>
+            </div>
+            <div id="in">
+                <span id="prompt">[guest@aman's laptop]$</span>
+                <input id="input" disabled>
+            </div>
+        </div>
+        <script type="module">
+            var term = document.getElementById("term");
+            var input = document.getElementById("input");
+            input.value = "";
+            
+            import init, { exec } from "./pkg/aman_wasm.js";
+            init().then(() => {
+                input.disabled = false;
+                input.focus();
+                term.onclick = () => input.focus();
+
+                input.onkeydown = (e) => {
+                    if (e.keyCode == 13) {
+                        exec(input.value);
+                    }
+                }
+            });
+        </script>
+    </body>
+</html>
