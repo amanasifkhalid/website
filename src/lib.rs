@@ -11,12 +11,11 @@ extern {
 }
 
 const HELP_MSG: &'static str = "ls, cat, and bash are all you'll need. Good luck!<br>I'm merely simulating a bash shell, so many commands don't work. I didn't implement <i>everything.";
-const FILENAMES: [&'static str; 5] = ["intro.txt", "work-exp.txt", "projects.txt", "contact.sh", "ysaye4.m4a"];
+const FILENAMES: [&'static str; 5] = ["intro.txt", "work-exp.txt", "projects.sh", "contact.sh", "ysaye4.m4a"];
 const LEGAL_PATHS: [&'static str; 7] = ["~", ".", "~/.", "/home/guest", "/home/guest/.", "~/", "/home/guest/",];
-const TXT_CONTENTS: [&'static str; 3] = [
-    "",
-    "",
-    ""
+const TXT_CONTENTS: [&'static str; 2] = [
+    "I'm glad you found me! I'm Aman, a computer science student at the University of Michigan.<br><br>I'm particularly interested in computer systems topics, such as operating systems and compilers. Post-graduation, I'll be joining Microsoft's .NET JIT compiler team as a software engineer starting July 2023.<br><br>In my spare time, I love reading and writing polemic essays, drinking too much coffee, and exploring New York.",
+    "EECS 280 Instructional Aide | University of Michigan | August 2022-Present<br><br>Software Engineer Intern | Microsoft | May-July 2022<br><br>Software Development Engineer Intern | Amazon | May-July 2021<br><br>Lab Intern | Mechanical and AI Lab, Carnegie Mellon University | June 2020-May 2021<br><br>Learn more <a class='yellow' href='https://linkedin.com/in/aman-khalid'>here.</a>"
 ];
 
 const EMPTY_STRING: String = String::new();
@@ -27,7 +26,7 @@ static mut ITER: usize = 0;
 fn print_generic_error_msg(cmd: &str) {
     for c in cmd.chars() {
         if c == '<' && cmd.len() > 1 {
-            output("<span class=\"warn\">Trying to inject something, are we? ;)");
+            output("<span class='yellow'>Trying to inject something, are we? ;)");
             return;
         }
         
@@ -61,11 +60,17 @@ fn exec_bash(split_cmd: Vec<&str>) {
     if split_cmd[1] == "contact.sh" {
         exec_contact_sh(split_cmd);
         return;
+    } else if split_cmd[1] == "projects.sh" {
+        redirect("https://github.com/amanasifkhalid");
+        return;
     }
 
     for path in LEGAL_PATHS[..5].iter() {
         if split_cmd[1] == format!("{}/contact.sh", path) {
             exec_contact_sh(split_cmd);
+            return;
+        } else if split_cmd[1] == format!("{}/projects.sh", path) {
+            redirect("https://github.com/amanasifkhalid");
             return;
         }
     }
@@ -79,11 +84,21 @@ fn exec_cat(split_cmd: Vec<&str>) {
         return;
     }
 
-    for i in 0..3 {
+    for i in 0..TXT_CONTENTS.len() {
         if split_cmd[1] == FILENAMES[i] {
             output(TXT_CONTENTS[i]);
+            return;
+        }
+
+        for path in LEGAL_PATHS[..5].iter() {
+            if split_cmd[1] == format!("{}/{}", path, FILENAMES[i]) {
+                output(TXT_CONTENTS[i]);
+                return;
+            }
         }
     }
+
+    output("cat: No such file or directory");
 }
 
 fn exec_cd(split_cmd: Vec<&str>) {
