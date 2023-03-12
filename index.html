@@ -7,20 +7,21 @@
     <body>
         <noscript>Regretfully, this page requires JavaScript.</noscript>
         <div id="out">
-            <div class="blue">Welcome to the machine, <a href="#" onclick="document.getElementById('floyd').play()">friend</a>.</div>
+            <div class="blue"><a href="#" onclick="document.getElementById('floyd').play()">Welcome to the machine.</a> Run `help` if you need some.</div>
         </div>
         <div id="in">
             <span id="prompt"><span class="blue">guest</span>@<span class="pink">aman's laptop</span> ~ <span class="blue">$</span></span>
             <span id="input" contenteditable hidden></span>
         </div>
         <audio id="ysaye" src="ysaye4.m4a" preload="none" hidden></audio>
-        <audio id="floyd" src="machine.mp3" preload="none" hidden></video>
+        <audio id="floyd" src="machine.mp3" preload="none" hidden></audio>
         <script type="module">
             var input = document.getElementById("input");
             input.textContent = "";
             
-            import init, { exec } from "./pkg/aman_wasm.js";
+            import init, { exec, get_newer_cmd, get_older_cmd, init_history } from "./pkg/aman_wasm.js";
             init().then(() => {
+                init_history();
                 input.hidden = false;
                 input.focus();
                 document.onclick = () => input.focus();
@@ -31,9 +32,13 @@
                         case 37:
                         case 39:
                             break;
-                        case 9:
                         case 38:
+                            get_older_cmd();
+                            e.preventDefault();
+                            break;
                         case 40:
+                            get_newer_cmd();
+                        case 9:
                             e.preventDefault();
                             break;
                         case 13:

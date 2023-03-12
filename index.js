@@ -1,14 +1,13 @@
+export function clear() {
+    document.getElementById("out").innerHTML = "";
+    document.getElementById("input").textContent = "";
+}
+
 export function output(msg) {
     var out = document.getElementById("out");
     var input = document.getElementById("input");
-    
-    if (msg === "clear") {
-        out.innerHTML = "";
-        input.textContent = "";
-        return;
-    }
-    
     var prompt = document.getElementById("prompt");
+
     var inputValue = document.createElement("p");
     inputValue.innerText = input.textContent;
     
@@ -30,12 +29,18 @@ export function pause() {
     output("");
 }
 
-export function play() {
-    document.getElementById("ysaye").play();
+export function play(id) {
+    document.getElementById("floyd").pause();
+    document.getElementById("ysaye").pause();
+    document.getElementById(id).play();
     output("");
 }
 
 export function redirect(url) {
     window.location = url;
     output("");
+}
+
+export function set_input(cmd) {
+    document.getElementById("input").textContent = cmd;
 }
